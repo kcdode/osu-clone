@@ -82,14 +82,14 @@ public class test extends PApplet {
         fftLog.logAverages( 22, 3 );
 
         rectMode(CORNERS);
-        font = loadFont("ArialMT-12.vlw");
+        //font = loadFont("ArialMT-12.vlw");
     }
 
     public void draw()
     {
         background(0);
 
-        textFont(font);
+        //textFont(font);
         textSize( 18 );
 
         float centerFrequency = 0;
