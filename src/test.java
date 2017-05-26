@@ -1,12 +1,35 @@
 // Created on 5/24/2017
 
+
+/*
+ * An FFT object is used to convert an audio signal into its frequency domain representation. This representation
+ * lets you see how much of each frequency is contained in an audio signal. Sometimes you might not want to
+ * work with the entire spectrum, so it's possible to have the FFT object calculate average frequency bands by
+ * simply averaging the values of adjacent frequency bands in the full spectrum. There are two different ways
+ * these can be calculated: <b>Linearly</b>, by grouping equal numbers of adjacent frequency bands, or
+ * <b>Logarithmically</b>, by grouping frequency bands by <i>octave</i>, which is more akin to how humans hear sound.
+ * <br/>
+ * This sketch illustrates the difference between viewing the full spectrum,
+ * linearly spaced averaged bands, and logarithmically spaced averaged bands.
+ * <p>
+ * From top to bottom:
+ * <ul>
+ *  <li>The full spectrum.</li>
+ *  <li>The spectrum grouped into 30 linearly spaced averages.</li>
+ *  <li>The spectrum grouped logarithmically into 10 octaves, each split into 3 bands.</li>
+ * </ul>
+ *
+ * Moving the mouse across the sketch will highlight a band in each spectrum and display what the center
+ * frequency of that band is. The averaged bands are drawn so that they line up with full spectrum bands they
+ * are averages of. In this way, you can clearly see how logarithmic averages differ from linear averages.
+ * <p>
+ * For more information about Minim and additional features, visit http://code.compartmental.net/minim/
+ */
+
+
 import processing.core.PApplet;
 import ddf.minim.*;
 import ddf.minim.analysis.*;
-import ddf.minim.effects.*;
-import ddf.minim.signals.*;
-import ddf.minim.spi.*;
-import ddf.minim.ugens.*;
 import processing.core.PFont;
 
 public class test extends PApplet {
@@ -15,16 +38,16 @@ public class test extends PApplet {
     }
 
 
-    Minim minim;
-    AudioPlayer jingle;
-    FFT fftLin;
-    FFT fftLog;
+    private Minim minim;
+    private AudioPlayer jingle;
+    private FFT fftLin;
+    private FFT fftLog;
 
-    float height3;
-    float height23;
-    float spectrumScale = 4;
+    private float height3;
+    private float height23;
+    private float spectrumScale = 10;
 
-    PFont font;
+    private PFont font;
 
     public void settings() {
         size(512, 480);
@@ -150,8 +173,8 @@ public class test extends PApplet {
                 // that can be passed to getBand. in this case, we simply use the
                 // index as coordinates for the rectangle we draw to represent
                 // the average.
-                int xl = (int)fftLog.freqToIndex(lowFreq);
-                int xr = (int)fftLog.freqToIndex(highFreq);
+                int xl = fftLog.freqToIndex(lowFreq);
+                int xr = fftLog.freqToIndex(highFreq);
 
                 // if the mouse is inside of this average's rectangle
                 // print the center frequency and set the fill color to red
@@ -174,28 +197,3 @@ public class test extends PApplet {
 }
 
 
-
-/**
- * An FFT object is used to convert an audio signal into its frequency domain representation. This representation
- * lets you see how much of each frequency is contained in an audio signal. Sometimes you might not want to
- * work with the entire spectrum, so it's possible to have the FFT object calculate average frequency bands by
- * simply averaging the values of adjacent frequency bands in the full spectrum. There are two different ways
- * these can be calculated: <b>Linearly</b>, by grouping equal numbers of adjacent frequency bands, or
- * <b>Logarithmically</b>, by grouping frequency bands by <i>octave</i>, which is more akin to how humans hear sound.
- * <br/>
- * This sketch illustrates the difference between viewing the full spectrum,
- * linearly spaced averaged bands, and logarithmically spaced averaged bands.
- * <p>
- * From top to bottom:
- * <ul>
- *  <li>The full spectrum.</li>
- *  <li>The spectrum grouped into 30 linearly spaced averages.</li>
- *  <li>The spectrum grouped logarithmically into 10 octaves, each split into 3 bands.</li>
- * </ul>
- *
- * Moving the mouse across the sketch will highlight a band in each spectrum and display what the center
- * frequency of that band is. The averaged bands are drawn so that they line up with full spectrum bands they
- * are averages of. In this way, you can clearly see how logarithmic averages differ from linear averages.
- * <p>
- * For more information about Minim and additional features, visit http://code.compartmental.net/minim/
- */
