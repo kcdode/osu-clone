@@ -22,14 +22,14 @@ public class MenuButton {
         this.p = p;
     }
 
-    public void display() {
+    public void draw() {
         p.rect(x, y, width, height);
         p.textSize(30);
         p.fill(255, 255, 255);
         p.text(name, x + 85, y + 50);
     }
 
-    public boolean isClicked() {
+    public boolean isOver() {
         return (p.mouseX > x && p.mouseX < x + width) &&
                 (p.mouseY > y && p.mouseY < y + height);
     }
