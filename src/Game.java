@@ -4,19 +4,18 @@ import ddf.minim.Minim;
 import ddf.minim.analysis.BeatDetect;
 import processing.core.PApplet;
 import shapes.GameCircle;
+import shapes.PointCounter;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-
+import java.util.Random;
 
 public class Game extends PApplet {
 
     private AudioPlayer song;
     private ArrayList<GameCircle> circles;
     private BeatDetect bd;
-
-    private float mx[] = new float[60];
-    private float my[] = new float[60];
+    private PointCounter counter;
+    private Random rand;
 
 
     public static void main(String[] args) {
@@ -29,6 +28,8 @@ public class Game extends PApplet {
 
     public void setup() {
         surface.setTitle("OSU! 2: Electric Boogaloo");
+        counter = new PointCounter();
+        rand = new Random();
         circles = new ArrayList<>();
 //        bd = new BeatDetect(song.bufferSize(), song.sampleRate());
 
@@ -42,20 +43,22 @@ public class Game extends PApplet {
 //            System.exit(0); }
 //        song.play();
         noStroke();
-        circles.add(new GameCircle(500, 500, this));
     }
 
     public void draw() {
         background(240,240,240);
-        fill(100, 50, 200);
+
+        if (frameCount % 30 == 0) {
+            circles.add(new GameCircle(rand.nextInt(1920), rand.nextInt(1080), this));
+        }
 
         for (GameCircle c: circles) {
             c.checkIsOver();
             c.draw();
-        //    System.out.print(c.getRadius() + " ");
-        }   //System.out.println();
+        }
 
-        if (circles.size() > 60) circles.remove(0);
+        // Keep list trimmed of useless, clicked on circles
+        if (circles.size() > 100) circles.remove(0);
 
     }
 }
