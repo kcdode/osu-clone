@@ -8,6 +8,9 @@
       <root url="jar://$USER_HOME$/Documents/Processing/libraries/minim/library/jl1.0.1.jar!/" />
       <root url="jar://$USER_HOME$/Documents/Processing/libraries/minim/library/tritonus_aos.jar!/" />
       <root url="jar://$USER_HOME$/Documents/Processing/libraries/minim/library/tritonus_share.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/processing-3.3.3/core/library/jogl-all-natives-windows-amd64.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/processing-3.3.3/core/library/jogl-all.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/processing-3.3.3/core/library/gluegen-rt.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

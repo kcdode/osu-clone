@@ -10,7 +10,7 @@ public class StartMenu extends PApplet {
     private MenuButton load;
     private AudioPlayer audio;
     private String filepath;
-    private boolean updateString; // toggles with pressing load
+    private boolean updateString; // toggles when pressing 'load' button
 
 
     public static void main(String[] args) {
@@ -25,7 +25,7 @@ public class StartMenu extends PApplet {
         int v = 1; // For alternating the title text
         int hoverChangePlay = 0; // Change button color if hovered over
         int hoverChangeLoad = 0;
-        background(255, 255, 240);
+        background(255, 255, 255);
 
         if (play.isOver()) {
             hoverChangePlay = 64;

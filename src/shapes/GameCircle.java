@@ -7,27 +7,39 @@ import processing.core.PApplet;
 public class GameCircle {
 
     private float x, y;
-    private static int radius = 150;
+    private int radius = 150;
     private PApplet p;
-    private int tillPop;
+    private boolean hoveredOver;
+    private int grow3 = 0;
 
     public GameCircle(float x, float y, PApplet applet) {
         this.x = x;
         this.y = y;
         this.p = applet;
-        int tillPop = 5; // Must hover for 5 frames before popping
+        this.hoveredOver = false;
+    }
+
+    public int getRadius() {
+        return radius;
     }
 
     public void draw() {
-        //p.fill(100, 100, 100);
+        p.fill(100, 100, 100);
+        // If hovered over, grow slightly, then quickly 'pop'
+        if (hoveredOver) {
+            if (grow3 < 4) {
+                grow3++;
+                radius+=3;
+            }
+            else if (radius > 0)
+                radius-=9;
+        }
         p.ellipse(x, y, radius, radius);
     }
 
-    public boolean isOver() {
-        return (PApplet.dist(x,y,p.mouseX,p.mouseY) < radius);
+    public void checkIsOver() {
+        if (PApplet.dist(x,y,p.mouseX,p.mouseY) < radius)
+            hoveredOver = true;
     }
 
-    public void pop() {
-
-    }
 }
