@@ -9,6 +9,8 @@ public class StartMenu extends PApplet {
     private MenuButton play;
     private MenuButton load;
     private AudioPlayer audio;
+    private RGBPicker rgb;
+    private int[] colors;
     private String filepath;
     private boolean updateString; // toggles when pressing 'load' button
 
@@ -21,7 +23,28 @@ public class StartMenu extends PApplet {
         size(1920, 1080);
     }
 
+    public void setup() {
+        surface.setTitle("OSU! 2: Electric Boogaloo");
+        background(255, 255, 255);
+        colorMode(RGB, 255, 255, 255);
+        noStroke();
+
+        rgb = new RGBPicker();
+        colors = new int[3];
+        filepath = "Song Path";
+
+        // Initialize menu buttons
+        play = new MenuButton("PLAY", 835, 700, this);
+        load = new MenuButton("LOAD", 835, 800, this);
+
+        // Menu song (Sweet Dreams by Eurythmics)
+        audio = new Minim(this).loadFile("music/sweetdreams.mp3");
+        audio.play();
+        audio.loop();
+    }
+
     public void draw() {
+        colors = rgb.nextColor();
         int v = 1; // For alternating the title text
         int hoverChangePlay = 0; // Change button color if hovered over
         int hoverChangeLoad = 0;
@@ -42,9 +65,9 @@ public class StartMenu extends PApplet {
         else if (frameCount % 60 < 60) v = 1;
 
         // Fill numbers are completely random; just for making lots of colors
-        fill(frameCount % 29 * 15,  frameCount % 6 * 40, frameCount % 20 * 35);
+        fill(colors[0],  colors[1], colors[2]);
         textSize(64);
-        text("OSU! 2: Electric Boogaloo", 575, 350 + (v - 1)*20);
+        text("OSU! 2: Electric Boogaloo", 1920/2, 350 + (v - 1)*20);
 
 
         // Draw Buttons
@@ -56,7 +79,8 @@ public class StartMenu extends PApplet {
         if (updateString) fill(0, 0, 0);
         else fill(128, 128, 128);
         textSize(24);
-        text(filepath, 810, 925);
+        textAlign(CENTER);
+        text(filepath, 1920/2, 925);
 
     }
 
@@ -71,22 +95,6 @@ public class StartMenu extends PApplet {
 
     }
 
-    public void setup() {
-        filepath = "Song Path";
-        colorMode(RGB, 255, 255, 255);
-        noStroke();
-        background(255, 255, 255);
-
-        // Initialize menu buttons
-        surface.setTitle("OSU! 2: Electric Boogaloo");
-        play = new MenuButton("PLAY", 810, 700, this);
-        load = new MenuButton("LOAD", 810, 800, this);
-
-        // Menu song (Sweet Dreams by Eurythmics)
-        audio = new Minim(this).loadFile("music/sweetdreams.mp3");
-        audio.play();
-        audio.loop();
-    }
 
     public void keyPressed() {
         if (!updateString) return;

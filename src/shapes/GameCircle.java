@@ -4,38 +4,45 @@ import processing.core.PApplet;
 /*
  * The individual circles that the player mouses over and 'pops'
  * User has 40 frames (2/3 second) to pop, before it expires
- * Increase tillExpire to increase timeframe and lower difficulty
+ * Increase tillExpire to increase time frame and lower difficulty
  */
 public class GameCircle {
 
     private float x, y;
     private int radius;
-    private PApplet p;
-    private boolean hoveredOver;
     private int popCount;
     private int tillExpire;
-    private int[] rgb;
+    private int[] rgb;private PApplet p;
+    private PointCounter counter;
+    private boolean counted;
+    private boolean hoveredOver;
 
-    public GameCircle(float x, float y, int[] rgb, PApplet applet) {
+
+    public GameCircle(float x, float y, int[] rgb, PApplet applet, PointCounter counter) {
         this.x = x;
         this.y = y;
         this.p = applet;
         this.rgb = rgb;
+        this.counter = counter;
         this.hoveredOver = false;
         radius = 100;
         tillExpire = 40;
         popCount = 0;
+        counted = false;
     }
 
-    public GameCircle(float[] pos, int[] rgb, PApplet applet) {
+    public GameCircle(float[] pos, int[] rgb, PApplet applet, PointCounter counter) {
         this.x = pos[0];
         this.y = pos[1];
         this.p = applet;
         this.rgb = rgb;
+        this.counter = counter;
+        counter.possiblePoints+=100;
         this.hoveredOver = false;
         radius = 100;
         tillExpire = 40;
         popCount = 0;
+        counted = false;
     }
 
     public void draw() {
@@ -61,6 +68,8 @@ public class GameCircle {
     private void expireBubble() {
         if (popCount < 5) {
             popCount++;
+            p.fill(0, 0, 0);
+            p.text("Missed!", 20, 80);
         } else if (popCount < 10 && radius > 0) {
             radius-=5;
         }
@@ -77,6 +86,10 @@ public class GameCircle {
 
     // If touched in time limit, grow slightly, then quickly 'pop'
     private void growThenPop() {
+        if (!counted) {
+            counted = true;
+            counter.pointsEarned += 100;
+        }
         // Stops expiration timer and blocks call to expireBubble()
         tillExpire = -1;
         if (popCount < 4) {

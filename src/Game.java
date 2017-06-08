@@ -23,10 +23,6 @@ public class Game extends PApplet {
     private PointCounter            counter;
     private Motion                  motion;
     private RGBPicker               rgbPicker;
-    private Random                  rd; // To generate random colors
-
-    private int                     totalPoints, pointsEarned;
-    private int                     totalCircles, circlesHit;
 
 
     public static void main(String[] args) {
@@ -43,7 +39,7 @@ public class Game extends PApplet {
 
         circles     = new ArrayList<>();
         bands       = new ArrayList<>();
-        counter     = new PointCounter();
+        counter     = new PointCounter(this);
         motion      = new Motion();
         rgbPicker   = new RGBPicker();
         song        = new Minim(this).loadFile(args[0]);
@@ -55,22 +51,30 @@ public class Game extends PApplet {
         beat.setSensitivity(300);
         song.play();
         t.start();
-        circles.add(new GameCircle(1920 / 2, 1080 / 2, rgbPicker.nextColor(), this));
+        circles.add(new GameCircle(1920 / 2, 1080 / 2, rgbPicker.nextColor(), this, counter));
     }
 
     public void draw() {
+        if (!song.isPlaying()) {
+            String[] paremeters = {String.valueOf(counter.possiblePoints), String.valueOf(counter.pointsEarned)};
+            EndGame.main(paremeters);
+            song.close();
+            surface.setVisible(false);
+            dispose();
+        }
         background(240,240,240);
+        counter.drawText();
         drawFFT();
         noStroke();
 
         beat.detect(song.mix);
 
         if (beat.isHat() ) {
-            circles.add(new GameCircle(motion.nextCircle(100), rgbPicker.nextColor(), this));
+            circles.add(new GameCircle(motion.nextCircle(100), rgbPicker.nextColor(), this, counter));
         } if (beat.isSnare() ) {
-            circles.add(new GameCircle(motion.nextCircle(150), rgbPicker.nextColor(), this));
+            circles.add(new GameCircle(motion.nextCircle(150), rgbPicker.nextColor(), this, counter));
         } if (beat.isKick() ) {
-            circles.add(new GameCircle(motion.nextCircle(200), rgbPicker.nextColor(), this));
+            circles.add(new GameCircle(motion.nextCircle(200), rgbPicker.nextColor(), this, counter));
         }
 
 
@@ -87,25 +91,7 @@ public class Game extends PApplet {
     }
 
 
-    /*
-     * Algorithm to determine how where the path of new circles
-     */
-    private void makeBubble(int distance) {
 
-        //circles.add(new GameCircle(rand.nextInt(1920), rand.nextInt(1080), this));
-//        xpos += distance;
-//        if (xpos > 1900) {
-//            xpos = 0;
-//            ypos += 100;
-//        }
-//        if (ypos > 900) {
-//            xpos = 0;
-//            ypos = 100;
-//        }
-
-        //circles.add(new GameCircle(xpos, ypos, this));
-
-    }
 
 
     // Draws the background, a linear average of all FFT bands at a given second.
@@ -135,22 +121,5 @@ public class Game extends PApplet {
 
 
 }
-
-    /**
-     * old code for just displaying circles in lines
-     *  if (beat.isRange(0, 1, 1) ) {
-     //            circles.add(new GameCircle(rand.nextInt(1920), rand.nextInt(1080), this));
-     circles.add(new GameCircle(xpos, ypos, this));
-     xpos+=100;
-     if (xpos > 1900) {
-     xpos = 0;
-     ypos+=100;
-     }
-     if (ypos > 900) {
-     xpos = 0;
-     ypos = 100;
-     }
-     }
-     */
 
 

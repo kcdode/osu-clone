@@ -1,8 +1,11 @@
 import java.util.Random;
 
+/*
+ * Provides an {R, G, B} array of always randomly changing colors
+ */
 class RGBPicker {
 
-    int[] rgb;
+    private int[] rgb;
     private Random rd;
     private int distanceTo;
     private int baseColor;
@@ -16,6 +19,7 @@ class RGBPicker {
         }
     }
 
+    // Increments chosen slider by 4. If it reaches the destination, choose a new target and keep going)
     int[] nextColor() {
         if (distanceTo < 5) newColor();
         switch (baseColor) {
@@ -36,11 +40,10 @@ class RGBPicker {
         return rgb;
     }
 
+    // Randomly picks a new target color on one of the 3 sliders (R, G, B)
     private void newColor() {
         baseColor = rd.nextInt(3) + 1;
-        System.out.println(baseColor);
         color = rd.nextInt(255);
-        System.out.println(color);
         switch (baseColor) {
             case 1:
                 distanceTo = Math.abs(rgb[0] - color);

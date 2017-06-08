@@ -24,9 +24,10 @@ public class MenuButton {
 
     public void draw() {
         p.rect(x, y, width, height);
+        p.textAlign(p.CENTER);
         p.textSize(30);
         p.fill(255, 255, 255);
-        p.text(name, x + 85, y + 50);
+        p.text(name, 1920/2, y + 50);
     }
 
     public boolean isOver() {
