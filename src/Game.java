@@ -4,12 +4,10 @@ import ddf.minim.Minim;
 import ddf.minim.analysis.BeatDetect;
 import ddf.minim.analysis.FFT;
 import processing.core.PApplet;
-import processing.core.PVector;
 import shapes.GameCircle;
 import shapes.PointCounter;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class Game extends PApplet {

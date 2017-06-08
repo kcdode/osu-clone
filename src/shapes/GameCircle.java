@@ -8,12 +8,13 @@ import processing.core.PApplet;
  */
 public class GameCircle {
 
-    private float x, y;
+    private final float  x, y;
     private int radius;
     private int popCount;
     private int tillExpire;
-    private int[] rgb;private PApplet p;
-    private PointCounter counter;
+    private int[] rgb;
+    private final PApplet p;
+    private final PointCounter counter;
     private boolean counted;
     private boolean hoveredOver;
 

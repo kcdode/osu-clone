@@ -8,12 +8,12 @@ import processing.core.PApplet;
  */
 public class MenuButton {
 
-    private int x;
+    private final int x;
     private final int width = 250;
-    private int y;
+    private final int y;
     private final int height = 80;
-    private String name;
-    private PApplet p;
+    private final String name;
+    private final PApplet p;
 
     public MenuButton(String name, int x, int y, PApplet p) {
         this.name = name;
