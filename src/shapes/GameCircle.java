@@ -3,33 +3,47 @@ package shapes;
 import processing.core.PApplet;
 /*
  * The individual circles that the player mouses over and 'pops'
- * User has 20 frames (1/3 second) to pop, before it expires and
+ * User has 40 frames (2/3 second) to pop, before it expires
+ * Increase tillExpire to increase timeframe and lower difficulty
  */
 public class GameCircle {
 
     private float x, y;
-    private int radius = 120;
+    private int radius;
     private PApplet p;
     private boolean hoveredOver;
     private int popCount;
     private int tillExpire;
+    private int[] rgb;
 
-    public GameCircle(float x, float y, PApplet applet) {
+    public GameCircle(float x, float y, int[] rgb, PApplet applet) {
         this.x = x;
         this.y = y;
         this.p = applet;
+        this.rgb = rgb;
         this.hoveredOver = false;
+        radius = 100;
+        tillExpire = 40;
+        popCount = 0;
+    }
+
+    public GameCircle(float[] pos, int[] rgb, PApplet applet) {
+        this.x = pos[0];
+        this.y = pos[1];
+        this.p = applet;
+        this.rgb = rgb;
+        this.hoveredOver = false;
+        radius = 100;
         tillExpire = 40;
         popCount = 0;
     }
 
     public void draw() {
-        p.fill(100, 100, 100);
+        p.fill(rgb[0], rgb[1], rgb[2]);
         p.ellipse(x, y, radius, radius);
 
         // Player has n frames to pop the bubble
         if (tillExpire > 0) {tillExpire --;}
-
         if (tillExpire == 0) {
             expireBubble();
         } else if (hoveredOver) {
@@ -65,14 +79,15 @@ public class GameCircle {
     private void growThenPop() {
         // Stops expiration timer and blocks call to expireBubble()
         tillExpire = -1;
-        if (popCount < 3) {
+        if (popCount < 4) {
             popCount++;
             radius += 2;
         } else if (radius > 0) {
-            radius -= 6;
+            radius -= 12;
         }
     }
 
+    // For testing
     public int getRadius() {
         return radius;
     }

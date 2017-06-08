@@ -4,6 +4,7 @@ import ddf.minim.Minim;
 import ddf.minim.analysis.BeatDetect;
 import ddf.minim.analysis.FFT;
 import processing.core.PApplet;
+import processing.core.PVector;
 import shapes.GameCircle;
 import shapes.PointCounter;
 
@@ -19,10 +20,11 @@ public class Game extends PApplet {
     private BeatDetect              beat;
     private FFT                     fft;
     private Thread                  t;
-//    private PointCounter            counter;
-    private Random                  rand;
+    private PointCounter            counter;
+    private Motion                  motion;
+    private RGBPicker               rgbPicker;
+    private Random                  rd; // To generate random colors
 
-    private int                     xpos, ypos;
     private int                     totalPoints, pointsEarned;
     private int                     totalCircles, circlesHit;
 
@@ -41,21 +43,19 @@ public class Game extends PApplet {
 
         circles     = new ArrayList<>();
         bands       = new ArrayList<>();
-//        counter     = new PointCounter();
-        rand        = new Random();
+        counter     = new PointCounter();
+        motion      = new Motion();
+        rgbPicker   = new RGBPicker();
         song        = new Minim(this).loadFile(args[0]);
         checkNullSong();
         beat        = new BeatDetect(song.bufferSize(), song.sampleRate());
         fft         = new FFT(song.bufferSize(), song.sampleRate());
         t           = new Thread(this::drawFFT);
-        xpos        = 0;
-        ypos        = 100;
 
-        totalCircles = circlesHit = totalPoints = pointsEarned = 0;
-
-        beat.setSensitivity(400);
+        beat.setSensitivity(300);
         song.play();
         t.start();
+        circles.add(new GameCircle(1920 / 2, 1080 / 2, rgbPicker.nextColor(), this));
     }
 
     public void draw() {
@@ -65,21 +65,13 @@ public class Game extends PApplet {
 
         beat.detect(song.mix);
 
-        if (beat.isOnset()) System.out.println("hi");
-        if (beat.isRange(0, 1, 1) ) {
-//            circles.add(new GameCircle(rand.nextInt(1920), rand.nextInt(1080), this));
-            circles.add(new GameCircle(xpos, ypos, this));
-            xpos+=100;
-            if (xpos > 1900) {
-                xpos = 0;
-                ypos+=100;
-            }
-            if (ypos > 900) {
-                xpos = 0;
-                ypos = 100;
-            }
+        if (beat.isHat() ) {
+            circles.add(new GameCircle(motion.nextCircle(100), rgbPicker.nextColor(), this));
+        } if (beat.isSnare() ) {
+            circles.add(new GameCircle(motion.nextCircle(150), rgbPicker.nextColor(), this));
+        } if (beat.isKick() ) {
+            circles.add(new GameCircle(motion.nextCircle(200), rgbPicker.nextColor(), this));
         }
-
 
 
         for (GameCircle c: circles) {
@@ -89,10 +81,32 @@ public class Game extends PApplet {
         }
 //        System.out.println();
 
-        // Keep list trimmed of useless, clicked on circles
-        if (circles.size() > 20) circles.remove(0);
+        // Keep list trimmed of old on circles
+        if (circles.size() > 40) circles.remove(0);
 
     }
+
+
+    /*
+     * Algorithm to determine how where the path of new circles
+     */
+    private void makeBubble(int distance) {
+
+        //circles.add(new GameCircle(rand.nextInt(1920), rand.nextInt(1080), this));
+//        xpos += distance;
+//        if (xpos > 1900) {
+//            xpos = 0;
+//            ypos += 100;
+//        }
+//        if (ypos > 900) {
+//            xpos = 0;
+//            ypos = 100;
+//        }
+
+        //circles.add(new GameCircle(xpos, ypos, this));
+
+    }
+
 
     // Draws the background, a linear average of all FFT bands at a given second.
     private void drawFFT() {
@@ -118,4 +132,25 @@ public class Game extends PApplet {
             System.exit(0); }
     }
 
+
+
 }
+
+    /**
+     * old code for just displaying circles in lines
+     *  if (beat.isRange(0, 1, 1) ) {
+     //            circles.add(new GameCircle(rand.nextInt(1920), rand.nextInt(1080), this));
+     circles.add(new GameCircle(xpos, ypos, this));
+     xpos+=100;
+     if (xpos > 1900) {
+     xpos = 0;
+     ypos+=100;
+     }
+     if (ypos > 900) {
+     xpos = 0;
+     ypos = 100;
+     }
+     }
+     */
+
+
