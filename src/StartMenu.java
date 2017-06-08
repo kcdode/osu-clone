@@ -89,10 +89,10 @@ public class StartMenu extends PApplet {
             Game.main(new String[]{filepath});
             audio.close();
             surface.setVisible(false);
+            dispose();
         } else if (load.isOver()) {
             updateString = !updateString;
         }
-
     }
 
 

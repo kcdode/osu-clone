@@ -16,7 +16,7 @@ public class EndGame extends PApplet {
 
     public void draw() {
         String percentage = String.valueOf(((double) Integer.parseInt(args[1]) / (double) Integer.parseInt(args[0]))*100);
-        percentage = percentage.substring(0, 5); // Hacky truncate to 2 decimals
+        if (percentage.length() > 5) percentage = percentage.substring(0, 5); // Hacky truncate to 2 decimals
         background(255, 255, 255);
         fill(0, 0, 0);
         textSize(32);

@@ -40,7 +40,7 @@ public class GameCircle {
         this.counter = counter;
         counter.possiblePoints+=100;
         this.hoveredOver = false;
-        radius = 100;
+        radius = 0; // Go to 100
         tillExpire = 40;
         popCount = 0;
         counted = false;
@@ -50,6 +50,8 @@ public class GameCircle {
         p.fill(rgb[0], rgb[1], rgb[2]);
         p.ellipse(x, y, radius, radius);
 
+        if (radius < 100 && !hoveredOver && tillExpire > 0) radius+=20;
+
         // Player has n frames to pop the bubble
         if (tillExpire > 0) {tillExpire --;}
         if (tillExpire == 0) {
@@ -57,6 +59,7 @@ public class GameCircle {
         } else if (hoveredOver) {
             growThenPop();
         }
+        if (radius < 0) radius = 0;
 
     }
 

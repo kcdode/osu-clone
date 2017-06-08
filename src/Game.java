@@ -38,7 +38,7 @@ public class Game extends PApplet {
         circles     = new ArrayList<>();
         bands       = new ArrayList<>();
         counter     = new PointCounter(this);
-        motion      = new Motion();
+        motion      = new Motion(this);
         rgbPicker   = new RGBPicker();
         song        = new Minim(this).loadFile(args[0]);
         checkNullSong();
@@ -54,11 +54,7 @@ public class Game extends PApplet {
 
     public void draw() {
         if (!song.isPlaying()) {
-            String[] paremeters = {String.valueOf(counter.possiblePoints), String.valueOf(counter.pointsEarned)};
-            EndGame.main(paremeters);
-            song.close();
-            surface.setVisible(false);
-            dispose();
+            endGame();
         }
         background(240,240,240);
         counter.drawText();
@@ -74,7 +70,9 @@ public class Game extends PApplet {
         } if (beat.isKick() ) {
             circles.add(new GameCircle(motion.nextCircle(200), rgbPicker.nextColor(), this, counter));
         }
-
+        int[] f = rgbPicker.nextColor();
+        motion.drawLine(f[0], f[1], f[2]);
+        noStroke();
 
         for (GameCircle c: circles) {
             c.checkIsOver();
@@ -88,8 +86,13 @@ public class Game extends PApplet {
 
     }
 
-
-
+    private void endGame() {
+        String[] paremeters = {String.valueOf(counter.possiblePoints), String.valueOf(counter.pointsEarned)};
+        EndGame.main(paremeters);
+        song.close();
+        surface.setVisible(false);
+        dispose();
+    }
 
 
     // Draws the background, a linear average of all FFT bands at a given second.
@@ -114,6 +117,12 @@ public class Game extends PApplet {
             text("Invalid filepath, quitting in 3 seconds...", 500, 500);
             try {TimeUnit.SECONDS.sleep(3); } catch (InterruptedException ex) {System.exit(0);}
             System.exit(0); }
+    }
+
+    public void keyPressed() {
+        if (keyCode == TAB) {
+            endGame();
+        }
     }
 
 
