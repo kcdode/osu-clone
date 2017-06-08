@@ -8,7 +8,7 @@ import processing.core.PApplet;
 public class GameCircle {
 
     private float x, y;
-    private int radius = 150;
+    private int radius = 120;
     private PApplet p;
     private boolean hoveredOver;
     private int popCount;
@@ -24,15 +24,18 @@ public class GameCircle {
     }
 
     public void draw() {
+        p.fill(100, 100, 100);
+        p.ellipse(x, y, radius, radius);
+
         // Player has n frames to pop the bubble
         if (tillExpire > 0) {tillExpire --;}
 
         if (tillExpire == 0) {
             expireBubble();
-        } else if (hoveredOver) {growThenPop();}
+        } else if (hoveredOver) {
+            growThenPop();
+        }
 
-        p.fill(100, 100, 100);
-        p.ellipse(x, y, radius, radius);
     }
 
     public void checkIsOver() {
@@ -44,14 +47,17 @@ public class GameCircle {
     private void expireBubble() {
         if (popCount < 5) {
             popCount++;
-        } else if (popCount < 10) {
+        } else if (popCount < 10 && radius > 0) {
             radius-=5;
         }
-        p.stroke(0, 0, 0);
-        p.strokeWeight(5);
-        p.line(x - radius/3, y - radius/3, x + radius/3, y + radius/3);
-        p.line(x + radius/3, y - radius/3, x - radius/3, y + radius/3);
-        p.noStroke();
+
+        if (radius > 0) {
+            p.stroke(0, 0, 0);
+            p.strokeWeight(5);
+            p.line(x - radius / 2, y - radius / 2, x + radius / 2, y + radius / 2);
+            p.line(x + radius / 2, y - radius / 2, x - radius / 2, y + radius / 2);
+            p.noStroke();
+        }
 
     }
 
@@ -59,12 +65,16 @@ public class GameCircle {
     private void growThenPop() {
         // Stops expiration timer and blocks call to expireBubble()
         tillExpire = -1;
-        if (popCount < 4) {
+        if (popCount < 3) {
             popCount++;
-            radius+=3;
+            radius += 2;
         } else if (radius > 0) {
-            radius -= 9;
+            radius -= 6;
         }
+    }
+
+    public int getRadius() {
+        return radius;
     }
 
 }
