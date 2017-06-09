@@ -11,6 +11,9 @@ import processing.core.PApplet;
 public class PointCounter {
     public int possiblePoints;
     public int pointsEarned;
+    public int multipliedScore;
+    public int multiplier;
+    public int maxMultiplier;
     private PApplet p;
 
     public PointCounter(PApplet p) {
@@ -20,8 +23,16 @@ public class PointCounter {
     // Shows text to screen
     public void drawText() {
         p.textSize(32);
+        p.textAlign(p.LEFT);
         p.fill(0, 0, 0);
-        p.text(pointsEarned, 20, 40);
+        p.text(multipliedScore, 20, 40);
+        p.text("x" + multiplier, 20, 70);
+    }
+
+
+    public void send(boolean b) {
+        multiplier = (b) ? multiplier+1 : 1;
+        if (multiplier > maxMultiplier) maxMultiplier = multiplier;
     }
 
 }

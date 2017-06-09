@@ -73,7 +73,9 @@ public class GameCircle {
         if (popCount < 5) {
             popCount++;
             p.fill(0, 0, 0);
-            p.text("Missed!", 20, 80);
+            p.textAlign(p.LEFT);
+            p.text("Missed!", 20, 100);
+            if (popCount == 5) counter.send(false);
         } else if (popCount < 10 && radius > 0) {
             radius-=5;
         }
@@ -91,7 +93,9 @@ public class GameCircle {
     // If touched in time limit, grow slightly, then quickly 'pop'
     private void growThenPop() {
         if (!counted) {
+            counter.send(true);
             counted = true;
+            counter.multipliedScore += 100*counter.multiplier;
             counter.pointsEarned += 100;
         }
         // Stops expiration timer and blocks call to expireBubble()

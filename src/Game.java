@@ -33,7 +33,7 @@ public class Game extends PApplet {
 
     public void setup() {
         surface.setTitle("OSU! 2: Electric Boogaloo");
-        noStroke();
+        background(240,240,240);
 
         circles     = new ArrayList<>();
         bands       = new ArrayList<>();
@@ -46,6 +46,14 @@ public class Game extends PApplet {
         fft         = new FFT(song.bufferSize(), song.sampleRate());
         t           = new Thread(this::drawFFT);
 
+        textAlign(CENTER);
+        textSize(64);
+        stroke(0, 0, 0);
+        fill(0, 0, 0);
+
+        noStroke();
+
+
         beat.setSensitivity(300);
         song.play();
         t.start();
@@ -57,8 +65,8 @@ public class Game extends PApplet {
             endGame();
         }
         background(240,240,240);
-        counter.drawText();
         drawFFT();
+        counter.drawText();
         noStroke();
 
         beat.detect(song.mix);
@@ -87,7 +95,7 @@ public class Game extends PApplet {
     }
 
     private void endGame() {
-        String[] paremeters = {String.valueOf(counter.possiblePoints), String.valueOf(counter.pointsEarned)};
+        String[] paremeters = {String.valueOf(counter.possiblePoints), String.valueOf(counter.pointsEarned), String.valueOf(counter.multipliedScore), String.valueOf(counter.maxMultiplier)};
         EndGame.main(paremeters);
         song.close();
         surface.setVisible(false);
